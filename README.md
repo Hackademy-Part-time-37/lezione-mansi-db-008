@@ -2,24 +2,23 @@
 ### Model e Migration
 1. Creo un nuovo progetto con `laravel new nome-progetto`
 2. Seleziono MySql e poi su NO
-2. Lancio `php artisan serve` in un nuovo terminale
-3. Apro un nuovo terminale, installo e lancio `npm i bootstrap` e successivamente `npm run dev`
-4. Creo un componente Layout e ci importo Bootstrap dentro con`@vite([resources/css/app.css','resources/js/app.js`
-5. Apro TablePlus e creo il database del progetto (Memorizzo il nome del DB);
-6. Configuro il Database dentro il file `.env`
+3. Lancio `php artisan serve` in un nuovo terminale
+4. Apro un nuovo terminale, installo e lancio `npm i bootstrap` e successivamente `npm run dev`
+5. Creo un componente Layout e ci importo Bootstrap dentro con`@vite([resources/css/app.css','resources/js/app.js`
+6. Apro TablePlus e creo il database del progetto (Memorizzo il nome del DB);
+7. Configuro il Database dentro il file `.env`
 
 ```
 
 DB_CONNECTION=mysql 
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=nome_del_DB (il nome usato al punto 5)
+DB_DATABASE=nome_del_DB (il nome usato al punto 6)
 DB_USERNAME=tuo_username (solitamente root)
 DB_PASSWORD=tua_password (solitamente rootroot)
 ```
 
-7. Creo la migrazione per la tabella `books` con il comando `php artisan make:migration create_books_table`
-8. Vado ad aggiungere 2 colonne nel metodo `up()`:
+8. Creo la migrazione per la tabella `books` con il comando `php artisan make:migration create_books_table` e vado ad aggiungere 2 colonne nel metodo `up()`:
     
     ```php
     $table->string('name');
