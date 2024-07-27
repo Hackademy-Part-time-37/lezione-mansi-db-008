@@ -1,66 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Step by Step
+### Model e Migration
+1. Creo un nuovo progetto con `laravel new nome-progetto`
+2. Seleziono MySql e poi su NO
+2. Lancio `php artisan serve` in un nuovo terminale
+3. Apro un nuovo terminale, installo e lancio `npm i bootstrap` e successivamente `npm run dev`
+4. Creo un componente Layout e ci importo Bootstrap dentro con`@vite([resources/css/app.css','resources/js/app.js`
+5. Apro TablePlus e creo il database del progetto (Memorizzo il nome del DB);
+6. Configuro il Database dentro il file `.env`
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```
 
-## About Laravel
+DB_CONNECTION=mysql 
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nome_del_DB (il nome usato al punto 5)
+DB_USERNAME=tuo_username (solitamente root)
+DB_PASSWORD=tua_password (solitamente rootroot)
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+7. Creo la migrazione per la tabella `books` con il comando `php artisan make:migration create_books_table`
+8. Vado ad aggiungere 2 colonne nel metodo `up()`:
+    
+    ```php
+    $table->string('name');
+    $table->integer('years')->nullable();
+    ```
+    
+9. Lancio la creazione della tabella con `php artisan migrate`
+10. Ho dimenticato di aggiungere la colonna `pages`, quindi lancio il comando: `php artisan make:migration add_to_books_table` e aggiungo la colonna nel metodo `up()`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```php
+$table->integer('pages')->nullable();
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+E nel metodo `down()`;
+```php
+$table->dropColumn('pages');
+```
+11. Lancio la creazione della tabella con `php artisan migrate`
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+12. Creo il controller `BookController` con il comando `php artisan make:controller BookController`
+13. Definisco 2 metodi cosi dichiarati:
+    - index(): Per visualizzare la lista di tutti i libri con Book::all();
+    - store(): Il metodo per salvare momentaneamente i dati in GET
+14. Definisco il metodo `index` 
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```php
+public function index()
+{ 
+    $books = Book::all(); 
+    return view('index', ['books' => $books]);
+}
+```
+15. Definisco il metodo `store` 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```php
+public function store()
+{ 
+    Book::create(['name' => 'Aulab']); 
+    return redirect()->route('index');
+}
+```
+16. Definisco le rotte in `web.php`:
 
-## Laravel Sponsors
+```php
+  Route::get('/books', [BookController::class, 'index'])->name('books.index');
+  Route::get('/books/store', [BookController::class, 'store'])->name('books.store');
+``` 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+17. Crea la view relative utilizzando un layout ed eventualmente dei componenti per creare una struttura responsive con Bootstrap 5.
+    - books/index
+    - components/layout (Dovresti averlo gia creato nel punto 5)
+    - components/navbar 
 
-### Premium Partners
+18. Aggiungo le nuova colonna negli attributi `$fillable` del Model appena creato Book
+```php artisan make:model Book ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```php
+  protected $fillable = [
+        'name',  'pages', 'years'
+    ];
+```
