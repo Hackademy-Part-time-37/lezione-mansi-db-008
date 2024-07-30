@@ -13,14 +13,11 @@
 </head>
 
 <body>
-    <ul>
-        @foreach ($books as $book)
-            <li>
-                <a href="{{ route('books.show', ['book' => $book->id]) }}">{{ $book->name }}
-                </a>
-            </li>
-        @endforeach
-    </ul>
+    <div class="container">
+        <h1>Nome: {{ $book->name }}</h1>
+        <p>Pagine Totali: {{ $book->pages }}</p>
+        <p>Anno di Scrittura: {{ $book->years }}</p>
+    </div>
 </body>
 
 </html>
