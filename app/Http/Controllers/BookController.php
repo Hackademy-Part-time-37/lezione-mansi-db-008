@@ -15,11 +15,11 @@ class BookController extends Controller
         //$books = Book::latest()->get(); //Ottiene tutto i dati della collezione
         //$books = Book::orderBy('name', 'ASC')->get(); //Ottiene tutto i dati della collezione
 
-        return view('index', ['books' => $books]);
+        return view('books.index', ['books' => $books]);
     }
     public function create()
     {
-        return view('create');
+        return view('books.create');
     }
 
     //public function show(Book $book) Injection
@@ -33,7 +33,7 @@ class BookController extends Controller
         }
         //Secondo livello
         //$book = Book::findOrFail($book);
-        return view('show', ['book' => $book]);
+        return view('books.show', ['book' => $book]);
     }
 
     public function store(BookStoreRequest $request)
@@ -42,6 +42,7 @@ class BookController extends Controller
         if ($request->hasFile('image')) {
             $name = $request->file('image')->getClientOriginalName();
             $path_image = $request->file('image')->storeAs('public/images', $name);
+            //$path_image = $request->file('image')->store('public/images');
         }
         // //$books = ['dafsd', 'fsfsd','dfffd']; 
         //nemmeno ci arriva

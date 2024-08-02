@@ -3,6 +3,10 @@
 use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return view('homepage');
+})->name('homepage');
+
 //Lista Libri
 Route::get('/libri', [BookController::class, 'index'])->name('books.index');
 //Form di creazione con create & store
