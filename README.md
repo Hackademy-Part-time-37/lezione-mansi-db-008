@@ -147,3 +147,64 @@ Route::get('/libri/{book}/show', [BookController::class, 'show'])
 13. Inserisci il path_name nel `Book::create([])`
 14. Lancia il comando `php artisan storage:link` per creare il collegamento con la cartella storage
 15. Nella view della card utilizza l’helper di Blade `{{Storage::url($book→image)}}` 
+
+### CRUD
+1. Aggiungo le rotte mancanti per compleatre il CRUD:
+```php 
+Route::get('/books/{book}/edit', [BookController::class, 'edit'])
+  ->name('books.edit');
+
+Route::put('/books/{book}/update', [BookController::class, 'update'])
+  ->name('books.update');
+
+Route::delete('/books/{book}', [BookController::class, 'destroy'])
+  ->name('books.destroy');
+```
+
+2. Vado nel BookController e specifico i relativi metodi
+3. Edit:
+
+```php 
+ public function edit(Book $book)
+    {
+
+        return view('books.edit', compact('book'));
+    }
+```
+
+4. Update:
+```php
+
+ public function update(BookUpdateRequest $request, Book $book)
+    {
+        $path_image = $book->image; // inserire immagine gia presente
+        if ($request->hasFile('image')) {
+            $file_name = $request->file('image')->getClientOriginalName();
+            $path_image = $request->file('image')->storeAs('public/images', $file_name); //Scrivo nel server 
+        }
+
+        $book->update([
+            'name' => $request->name,
+            'pages' => $request->pages,
+            'year' => $request->year,
+            'image' => $path_image,
+        ]);
+
+        return redirect()->route('books.index')->with('success', 'Libro Aggiornato');
+    }
+
+```
+
+5. Destory:
+
+```php
+
+    public function destroy(Book $book)
+    {
+        $book->delete();
+        return redirect()->route('books.index')->with('success', 'Libro Eliminato');
+    }
+```
+
+6. View: In ultimo, creare la vista edit per gestire il form di modifica
+7. Tutte le rotte possono essere sostituite da: ```php Route::resource('books', BookController::class);```
