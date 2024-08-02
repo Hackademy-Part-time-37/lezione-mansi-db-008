@@ -3,6 +3,12 @@
     <div class="rounded-3 py-5 px-4 px-md-5 mb-5">
 
         <div class="container mt-5">
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="align-middle gap-2 d-flex justify-content-between">
                 <h3>Elenco Libri inseriti</h3>
                 <form class="d-flex" role="search" action="#" method="POST">
@@ -40,11 +46,15 @@
                                         Visualizza
                                     </a>
 
-                                    <a href="#" class="btn btn-warning me-md-2 d-none">
+                                    <a href="{{ route('books.edit', ['book' => $book]) }}"
+                                        class="btn btn-warning me-md-2 ">
                                         Modifica
                                     </a>
-
-                                    <button type="button" class="btn btn-danger me-md-2 d-none">Elimina</button>
+                                    <form action="{{ route('books.destroy', ['book' => $book]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger me-md-2 ">Elimina</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
